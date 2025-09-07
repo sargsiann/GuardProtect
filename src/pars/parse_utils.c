@@ -23,9 +23,20 @@ char	*proc_path(char *pid)  // func for formatting pid path
 	return path;
 }
 
+void	free_proc_info(t_proc_info *info) 
+{
+	if (!info)
+		return ;
+	if (info->name)
+		free(info->name);
+	if (info->end_time)
+		free(info->end_time);
+	free(info);
+}
+
 void	free_proc_exit(char *path, t_proc_info *info, char *msg) 
 {	
 	free(path);
-	free(info);
+	free_proc_info(info);
 	exit_error(msg,false);
 }

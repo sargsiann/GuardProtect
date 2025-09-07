@@ -7,5 +7,6 @@ int main(int ac, char **av)
 	t_proc_info *proc_info = parse_proc(av[1]);
 	if (proc_info != NULL)
 		print_proc_info(proc_info);
+	free_proc_info(proc_info);
 	return 0;
 }
