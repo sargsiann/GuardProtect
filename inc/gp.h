@@ -34,6 +34,6 @@ void		free_proc_exit(char *path, t_proc_info *info, char *msg) ;
 t_proc_info	*parse_proc(char *pid) ;
 void		print_proc_info(t_proc_info *info) ;
 bool		is_num(char c);
-void	free_proc_info(t_proc_info *info) ;
+void		free_proc_info(t_proc_info *info) ;
 
 #endif

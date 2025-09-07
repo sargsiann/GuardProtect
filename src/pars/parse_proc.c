@@ -45,8 +45,8 @@ bool	get_proc_info(char *path, t_proc_info *proc_info)
 	proc_info->pid = atoi(buff);
 	
 	//2. moving through the second indicator
-	char	*start = strchr(buff,' ') + 1;
-	char	*name_end = strchr(start,' '); // the second space
+	char	*start = strchr(buff,' ') + 2; // skipping first '('
+	char	*name_end = strchr(start,' ') - 1; // the second space skipping the last ')'
 	*name_end = 0; // temporary put 0 on it
 	proc_info->name = strdup(start); // duping that section of memory
 	*name_end = ' '; // restoreing the value
