@@ -52,7 +52,7 @@ bool	get_proc_info(char *path, t_proc_info *proc_info)
 	*name_end = ' '; // restoreing the value
 
 	//3. moving through the third indicator
-	proc_info->state = get_state(*(name_end + 1));
+	proc_info->state = get_state(*(name_end + 2)); // state is after the space
 	name_end += 2;
 
 	//4. moving through the fourth indicator

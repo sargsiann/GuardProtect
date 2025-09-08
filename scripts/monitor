@@ -1,0 +1,3 @@
+#!/bin/bash
+
+awk '{printf "Name:%s Pid: %s\n",substr($2,2,length($2)-2),$1}' /proc/[0-9]*/stat

@@ -4,7 +4,7 @@ SRCS = $(shell find src -name *.c) #all .c files in src
 
 HEADERS=$(shell find inc -name *.h) #all .h in includes
 
-CFLAGS = -Wall #flags
+CFLAGS = -Wall -g #flags
  
 CC = gcc #complier
 

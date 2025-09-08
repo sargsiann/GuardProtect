@@ -1,0 +1,49 @@
+#!/bin/bash
+sig_array=($(kill -l | awk '{print $2 " " $4 " " $6 " " $8 " " $10 " " $12 " " $13}'))
+
+
+kill_code=0
+
+if [[ -z "$1" || -z "$2" ]]; then #checking for right usage of script
+	echo "Please give the process name: ./kill_proc <p_name> <SIG_TYPE>">&2 #redirecting to stderr
+	exit 1 #exiting with exit code 1 as an result of no success
+fi
+
+is_true_sig=0
+
+for sig in "${sig_array[@]}"; do 
+	if [ "$2" = "$sig" ]; then
+		is_true_sig=1
+		break 
+	fi
+done
+
+if [ "$is_true_sig" -eq 0 ]; then
+	echo "Wrong Signal Name\n">&2
+	exit 1
+fi
+
+pid=($(./monitor | grep "Name:$1 " | awk '{print $3}')) #as we wrote our monitor to show pid and names we can get our pid by name from there 
+#ALWAYS REMEMBER IF WE HAVE VAR LIKE PID'NO SPACES'='NO SPACES'$(EXPRESSION)
+
+
+if [ -z "$pid" ]; then
+	echo "No such process with that name">&2
+	exit 1
+fi
+
+echo "PIDS with that name"
+for pid in "${pid[@]}"; do 
+	echo "$pid"
+done
+
+
+echo "Memory Before signal handling with that process"
+free -h
+
+for pid in "${pid[@]}"; do 
+	kill -"$2" "$pid"
+done
+
+echo "After"
+free -h
