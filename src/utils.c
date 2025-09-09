@@ -14,3 +14,17 @@ bool	is_num(char c)
 {
 	return c >= '0' && c <= '9';
 }
+
+bool	is_strnumeric(char *str) 
+{
+	if (!str)
+		return false;
+	int i = 0;
+	while (str[i])
+	{
+		if (is_num(str[i]) == false)
+			return false;
+		i++;
+	}
+	return true;
+}

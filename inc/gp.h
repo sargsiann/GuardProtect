@@ -1,5 +1,6 @@
 #ifndef GP_H
 # define GP_H
+# define TABLE_SIZE 1021 //the max size of hash table the prime number to reduce num of collisions
 
 #include <stdio.h>
 #include <fcntl.h>
@@ -10,6 +11,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <time.h>
+#include <dirent.h>
 
 typedef	enum {
 	RUNNING, // process is on runing state on cpu or waiting to run on cpu
@@ -19,12 +21,15 @@ typedef	enum {
 	STOPPED, //process state that is stopped by signal but can be woken up CTRL + Z to stopp the process, fg after to work it again
 }	proc_state;
 
+
 typedef struct s_proc_info {
 	char		*name; // name of process
 	pid_t		pid; // process id
 	pid_t		ppid; // process of parent id
 	proc_state	state; //state of the process
 	char		*end_time; // end time of the process in readable format
+	struct		s_proc_info **childs; //pointer to an child process of each process FOR TREE
+	struct		s_proc_info *next; //next to an next member in hash table in case of chaining FOR LINKED LIST
 }	t_proc_info;
 
 void		exit_error(const char *msg, bool exit);
@@ -35,5 +40,13 @@ t_proc_info	*parse_proc(char *pid) ;
 void		print_proc_info(t_proc_info *info) ;
 bool		is_num(char c);
 void		free_proc_info(t_proc_info *info) ;
+void		delete_from_table(t_proc_info **table,int pid) ;
+t_proc_info	*get_from_table(int pid, t_proc_info **table) ;
+void		insert_to_table(t_proc_info **table,t_proc_info *process) ;
+int			hash_function(int pid); // the function returns the index by PID
+bool		is_strnumeric(char *str) ;
+void		print_hash_table(t_proc_info **table) ;
+t_proc_info	**process_table();
+void		free_hash_table(t_proc_info **table) ;
 
 #endif

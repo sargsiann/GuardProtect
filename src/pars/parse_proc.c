@@ -53,7 +53,7 @@ bool	get_proc_info(char *path, t_proc_info *proc_info)
 
 	//3. moving through the third indicator
 	proc_info->state = get_state(*(name_end + 2)); // state is after the space
-	name_end += 2;
+	name_end += 3;
 
 	//4. moving through the fourth indicator
 	proc_info->ppid = atoi(name_end);

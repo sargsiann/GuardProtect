@@ -27,7 +27,7 @@ pid=($(./monitor | grep "Name:$1 " | awk '{print $3}')) #as we wrote our monitor
 #ALWAYS REMEMBER IF WE HAVE VAR LIKE PID'NO SPACES'='NO SPACES'$(EXPRESSION)
 
 
-if [ -z "$pid" ]; then
+if [ ${#pid[@]} -eq 0 ]; then
 	echo "No such process with that name">&2
 	exit 1
 fi
@@ -41,9 +41,13 @@ done
 echo "Memory Before signal handling with that process"
 free -h
 
+errors=0
+success=0
+
 for pid in "${pid[@]}"; do 
-	kill -"$2" "$pid"
+	(kill -"$2" "$pid") || (echo "Failed to Kill $pid">&2) #if our kill failed
 done
 
+sleep 1; #sleeping 1 sec for getting fresh info about process 
 echo "After"
 free -h
