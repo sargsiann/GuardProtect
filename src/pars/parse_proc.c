@@ -57,6 +57,9 @@ bool	get_proc_info(char *path, t_proc_info *proc_info)
 
 	//4. moving through the fourth indicator
 	proc_info->ppid = atoi(name_end);
+	proc_info->next = NULL;
+
+	proc_info->cpu_usage = get_cpu_usage(buff); // getting the cpu usage of process
 	close(fd);
 	if (access(path,R_OK) != 0) { // if in time of process info getting process ended we get approximate time of end
 		proc_info->end_time = get_end_time();

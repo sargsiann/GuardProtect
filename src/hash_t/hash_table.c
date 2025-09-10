@@ -30,7 +30,7 @@ t_proc_info	**process_table() // function for hash table of all processes
 	t_proc_info **table = malloc(sizeof(t_proc_info *) * TABLE_SIZE);
 	if (!table)
 		exit_error("Malloc error:",1); //exiting the programm
-	memset(table,0,TABLE_SIZE); //putting all 0s;
+	memset(table,0,TABLE_SIZE * sizeof(t_proc_info *)); //putting all 0s;
 	DIR *processes_dir = opendir("/proc");
 	if (!processes_dir) {
  		exit_error("Cant open the /proc dir",0); //no exit

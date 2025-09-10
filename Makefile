@@ -4,7 +4,7 @@ SRCS = $(shell find src -name *.c) #all .c files in src
 
 HEADERS=$(shell find inc -name *.h) #all .h in includes
 
-CFLAGS = -Wall -g -fsanitize=address #flags
+CFLAGS = -fsanitize=address -Wall -g # #flags
  
 CC = gcc #complier
 
@@ -17,7 +17,7 @@ all : $(NAME) #alls target is our NAME
 
 #linking all together
 $(NAME) : Makefile $(OBJS) $(HEADERS) #the deps of liniking is Makefile changes header changes and recompiling objs
-	$(CC) $(OBJS) -o $(NAME)
+	$(CC) -fsanitize=address $(OBJS) -o $(NAME)
 
 clean : #cleaning OBJ files
 	rm -rf $(OBJS)

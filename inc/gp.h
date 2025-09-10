@@ -21,13 +21,13 @@ typedef	enum {
 	STOPPED, //process state that is stopped by signal but can be woken up CTRL + Z to stopp the process, fg after to work it again
 }	proc_state;
 
-
 typedef struct s_proc_info {
 	char		*name; // name of process
 	pid_t		pid; // process id
 	pid_t		ppid; // process of parent id
 	proc_state	state; //state of the process
 	char		*end_time; // end time of the process in readable format
+	float		cpu_usage; //cpu usage in percent of process
 	struct		s_proc_info **childs; //pointer to an child process of each process FOR TREE
 	struct		s_proc_info *next; //next to an next member in hash table in case of chaining FOR LINKED LIST
 }	t_proc_info;
@@ -48,5 +48,6 @@ bool		is_strnumeric(char *str) ;
 void		print_hash_table(t_proc_info **table) ;
 t_proc_info	**process_table();
 void		free_hash_table(t_proc_info **table) ;
+float		get_cpu_usage(char *buff) ;
 
 #endif

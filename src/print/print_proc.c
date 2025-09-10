@@ -27,6 +27,7 @@ void	print_proc_info(t_proc_info *info)
 			printf("UNKNOWN\n");
 			break;
 	}
+	printf("CPU Usage : %.2f %%\n",info->cpu_usage);
 	if (info->end_time)
 		printf("Process ended during GP call: %s\n",info->end_time);
 }

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Directory to monitor (defaults to current directory if not specified)
+WATCH_DIR="${1:-.}" 
+
+echo "Monitoring directory: $WATCH_DIR for file modifications..."
+
+# Loop indefinitely to watch for events
+inotifywait -m -r -e modify "$WATCH_DIR" | #-m monitor indefinitely -r recursive for subdirs -e event modified
+while read -r directory event filename; do # piped output read line by line
+  extension="${filename##*.}"
+  if [[ "$extension" != "c" && "$extension" != "h" 
+  ]]; then
+	continue # Skip non-C/C++ files
+  fi
+  echo "File modified: $directory$filename - Running make..."
+  make # Execute the make command
+done

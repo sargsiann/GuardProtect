@@ -12,7 +12,6 @@ void	print_hash_table(t_proc_info **table) // table printer
 		while (tmp) 
 		{
 			print_proc_info(tmp); // in case of collisions printing all in LL
-			printf("-----------------------\n");
 			tmp = tmp->next;
 		}
 	}

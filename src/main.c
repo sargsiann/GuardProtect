@@ -10,7 +10,7 @@ void	executor(char *pid)
 		return ;
 	}
 	t_proc_info **table = process_table();
-	print_hash_table(table);
+	// print_hash_table(table);
 	free_hash_table(table);
 }
 
