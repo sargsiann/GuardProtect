@@ -1,0 +1,8 @@
+#!/bin/bash
+
+ps -e --forest | cut -d: -f3-4 | sed 's/^.\{2\}//' | tail -n +2
+
+#ps -e for numeric pid processes --forest to print like tree
+#cut -d find delimiter : and starts from fields 3-4
+# sed puts first two chars of given cut string to empty
+# starts printing from second line
