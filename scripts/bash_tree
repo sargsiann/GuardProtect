@@ -1,0 +1,7 @@
+#!/bin/bash
+ps -e --forest | cut -d: -f3-4 | sed 's/^.\{2\}//' | tail -n +2
+
+# ps -e for numeric process -forest to print like tree
+# cut -d : delimieter fields from 3-4 
+# sed command puts first two chars empy because it was remained from cut -d
+# tail -n prints all lines from 2line
