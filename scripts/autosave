@@ -9,8 +9,7 @@ echo "Monitoring directory: $WATCH_DIR for file modifications..."
 inotifywait -m -r -e modify "$WATCH_DIR" | #-m monitor indefinitely -r recursive for subdirs -e event modified
 while read -r directory event filename; do # piped output read line by line
   extension="${filename##*.}"
-  if [[ "$extension" != "c" && "$extension" != "h" 
-  ]]; then
+  if [[ "$extension" != "c" && "$extension" != "h" ]]; then
 	continue # Skip non-C/C++ files
   fi
   echo "File modified: $directory$filename - Running make..."

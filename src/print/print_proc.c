@@ -2,32 +2,29 @@
 
 void	print_proc_info(t_proc_info *info) 
 {
-	printf("Process Name : %s\n",info->name);
-	printf("Process ID : %d\n",info->pid);
-	printf("Parent Process ID : %d\n",info->ppid);
-	printf("Process State : ");
+	printf("%20s	",info->name);
+	printf("%5d	",info->pid);
+	printf("%5d	",info->ppid);
 	switch (info->state) 
 	{
 		case RUNNING:
-			printf("RUNNING\n");
+			printf("%20s","RUNNING ");
 			break;
 		case SLEEPING:
-			printf("SLEEPING\n");
+			printf("%20s","SLEEPING ");
 			break;
 		case UNINTSLEEP:
-			printf("UNINTERRUPTIBLE SLEEP\n");
+			printf("%20s","UNINTERRUPTIBLE SLEEP ");
 			break;
 		case ZOMBIE:
-			printf("ZOMBIE\n");
+			printf("%20s","ZOMBIE ");
 			break;
 		case STOPPED:
-			printf("STOPPED\n");
+			printf("%20s","STOPPED ");
 			break;
 		default:
-			printf("UNKNOWN\n");
+			printf("%20s","UNKNOWN ");
 			break;
 	}
-	printf("CPU Usage : %.2f %%\n",info->cpu_usage);
-	if (info->end_time)
-		printf("Process ended during GP call: %s\n",info->end_time);
+	printf("%10.2f %%\n",info->cpu_usage);
 }
