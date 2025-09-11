@@ -19,6 +19,8 @@ void		free_hash_table(t_proc_info **table)
 	{
 		if (table[i] == NULL)
 			continue ;
+		if (table[i]->children)
+			free(table[i]->children);
 		t_proc_info *tmp = table[i];
 		free_list(tmp);
 	}

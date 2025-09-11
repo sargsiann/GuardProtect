@@ -29,8 +29,6 @@ void	free_proc_info(t_proc_info *info)
 		return ;
 	if (info->name)
 		free(info->name);
-	if (info->end_time)
-		free(info->end_time);
 	free(info);
 }
 

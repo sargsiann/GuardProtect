@@ -16,15 +16,6 @@ proc_state	get_state(char c)
 		return -1;
 }
 
-char	*get_end_time() 
-{
-	char buff[64] = {0}; // buffer for time string
-	time_t now = time(NULL); // getting the current time
-	struct tm *t = localtime(&now); // converting to local time structure
-	strftime(buff, sizeof(buff)-1, "%Y-%m-%d %H:%M", t); // formatting the time into a readable string
-	return strdup(buff);
-}
-
 bool	get_proc_info(char *path, t_proc_info *proc_info)
 {
 	int	fd = open(path,O_RDONLY); // opening for reading
@@ -46,24 +37,23 @@ bool	get_proc_info(char *path, t_proc_info *proc_info)
 	
 	//2. moving through the second indicator
 	char	*start = strchr(buff,' ') + 2; // skipping first '('
-	char	*name_end = strchr(start,' ') - 1; // the second space skipping the last ')'
+	char	*name_end = strchr(start,')'); // the second space skipping the last ')'
 	*name_end = 0; // temporary put 0 on it
 	proc_info->name = strdup(start); // duping that section of memory
-	*name_end = ' '; // restoreing the value
+	*name_end = ')'; // restoreing the value
 
 	//3. moving through the third indicator
-	proc_info->state = get_state(*(name_end + 2)); // state is after the space
-	name_end += 3;
+	proc_info->state = get_state(*(name_end + 1)); // state is after the space
+	name_end += 4;
 
 	//4. moving through the fourth indicator
 	proc_info->ppid = atoi(name_end);
 	proc_info->next = NULL;
 
 	proc_info->cpu_usage = get_cpu_usage(buff); // getting the cpu usage of process
+	proc_info->children = NULL; // by default 0
+	proc_info->children_size = 0; // by default 0
 	close(fd);
-	if (access(path,R_OK) != 0) { // if in time of process info getting process ended we get approximate time of end
-		proc_info->end_time = get_end_time();
-	}
 	return true;
 }
 
