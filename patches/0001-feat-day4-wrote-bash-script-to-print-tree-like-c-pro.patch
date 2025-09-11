@@ -1,0 +1,27 @@
+From 180a3cb4175dab8993567660d4c79d55f0d19fa4 Mon Sep 17 00:00:00 2001
+From: sargsiann <sargsyand648@gmail.com>
+Date: Thu, 11 Sep 2025 23:38:54 +0400
+Subject: [PATCH 1/5] feat:day4 wrote bash script to print tree like c programm
+
+---
+ scripts/bash_tree | 7 +++++++
+ 1 file changed, 7 insertions(+)
+ create mode 100755 scripts/bash_tree
+
+diff --git a/scripts/bash_tree b/scripts/bash_tree
+new file mode 100755
+index 0000000..4bf506b
+--- /dev/null
++++ b/scripts/bash_tree
+@@ -0,0 +1,7 @@
++#!/bin/bash
++ps -e --forest | cut -d: -f3-4 | sed 's/^.\{2\}//' | tail -n +2
++
++# ps -e for numeric process -forest to print like tree
++# cut -d : delimieter fields from 3-4 
++# sed command puts first two chars empy because it was remained from cut -d
++# tail -n prints all lines from 2line
+\ No newline at end of file
+-- 
+2.43.0
+

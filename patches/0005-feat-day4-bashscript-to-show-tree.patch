@@ -1,0 +1,28 @@
+From c4c94d113c3955b37d471453f09e01dabcee5322 Mon Sep 17 00:00:00 2001
+From: sargsiann <sargsyand648@gmail.com>
+Date: Thu, 11 Sep 2025 23:55:11 +0400
+Subject: [PATCH 5/5] feat:day4 bashscript to show tree
+
+---
+ scripts/proc_tree | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+ create mode 100644 scripts/proc_tree
+
+diff --git a/scripts/proc_tree b/scripts/proc_tree
+new file mode 100644
+index 0000000..5759d05
+--- /dev/null
++++ b/scripts/proc_tree
+@@ -0,0 +1,8 @@
++#!/bin/bash
++
++ps -e --forest | cut -d: -f3-4 | sed 's/^.\{2\}//' | tail -n +2
++
++#ps -e for numeric pid processes --forest to print like tree
++#cut -d find delimiter : and starts from fields 3-4
++# sed puts first two chars of given cut string to empty
++# starts printing from second line
+\ No newline at end of file
+-- 
+2.43.0
+
