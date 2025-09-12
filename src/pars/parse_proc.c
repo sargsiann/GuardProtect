@@ -50,7 +50,7 @@ bool	get_proc_info(char *path, t_proc_info *proc_info)
 	proc_info->ppid = atoi(name_end);
 	proc_info->next = NULL;
 
-	proc_info->cpu_usage = get_cpu_usage(buff); // getting the cpu usage of process
+	proc_info->cpu_usage = get_cpu_usage(buff,NULL); // getting the cpu usage of process
 	proc_info->mem_usage = get_mem_usage(proc_info->pid);
 	proc_info->children = NULL; // by default 0
 	proc_info->children_size = 0; // by default 0
