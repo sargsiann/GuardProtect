@@ -26,6 +26,6 @@ void	print_proc_info(t_proc_info *info)
 			printf("%20s","UNKNOWN ");
 			break;
 	}
-	printf("%10.2f %%",info->cpu_usage);
-	printf("%10.2f %%\n",info->mem_usage);
+	printf("%10.2f%%",info->cpu_usage);
+	printf("%10.2f%%\n",info->mem_usage);
 }

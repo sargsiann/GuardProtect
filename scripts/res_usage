@@ -1,0 +1,61 @@
+#!/bin/bash
+
+cmp_flag=$1 #flag for compareing result of ./gp all result with our scripts
+
+if [ ! -z $1 ]; then 
+	if [ ! -e "../gp" ] ; then
+		echo "please do an make to have gp"
+		exit 1
+	fi
+	if [ $1 != '-d' ] ; then
+		echo "wrong argument type ./res_usage -d"
+		exit 1
+	fi
+fi
+
+
+top_cmd="$(top -b -n 1 | tail -n +8 | awk '{printf("%-10s %-10s %-10s \n",$1,$9,$10)}' | sort -n)"
+
+
+gp_cmd="$(../gp all | tail -n +2 | gawk '{
+    num = ""
+    num2 = ""
+    num3 = ""
+
+    # find first pure number
+    for (i = 1; i <= NF; i++) {
+        if ($i ~ /^[0-9]+$/) {
+            num = $i
+            pos = i      # remember where we found it
+            break
+        }
+    }
+
+    # find first % at least 5 fields after num
+    for (j = pos + 1; j <= NF; j++) {
+        if ($j ~ /^[0-9.]+%$/) {
+            num2 = $j
+            pos2 = j
+            break
+        }
+    }
+
+    # # find next % after num2
+    for (k = pos2 + 1; k <= NF; k++) {
+        if ($k ~ /^[0-9.]+%$/) {
+            num3 = $k
+            break
+        }
+    }
+
+    printf("%-10s %-10s %-10s\n", num, num2, num3)
+}' | sort -n)"
+
+
+
+if [ ! -z $1 ]; then 
+	echo "$gp_cmd" > gp_res
+	echo "$top_cmd" > top_res
+else
+	echo "$top_cmd"
+fi
