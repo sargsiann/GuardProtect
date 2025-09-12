@@ -55,7 +55,7 @@ float	get_time_from_boot()
 	return atof(buff); // returning the time from boot in seconds
 }
 
-float	get_cpu_usage(char *buff) 
+float	get_cpu_usage(char *buff, char *name) 
 {	
 	int ticks_per_sec = sysconf(_SC_CLK_TCK); // getting the number of jiffies per sec from system configuration
 
@@ -66,10 +66,11 @@ float	get_cpu_usage(char *buff)
 	int start_time = 0;
 
 	get_cpu_section(&user_time,&kernel_time,&cus_time,&cuk_time,buff, &start_time);
-	int	total_time = get_time_from_boot() * ticks_per_sec - start_time; // total time in jiffies that process is active
+	
+	float	total_time = get_time_from_boot() - start_time/ticks_per_sec; // total time in jiffies that process is active
 	if (total_time == 0)
 		return 0;
-	float	cpu_usage = 100.0 * (user_time + kernel_time + cus_time + cuk_time) / total_time;
+	float	cpu_usage = 100.00 * ((user_time/ticks_per_sec + kernel_time/ticks_per_sec + cus_time/ticks_per_sec + cuk_time/ticks_per_sec) / total_time);
 
 	// get_cpu_section(&user_time,&kernel_time,&cus_time,&cuk_time,buff);
 	return cpu_usage;
