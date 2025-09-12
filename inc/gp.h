@@ -44,12 +44,12 @@ void		free_proc_info(t_proc_info *info) ;
 void		delete_from_table(t_proc_info **table,int pid) ;
 t_proc_info	*get_from_table(int pid, t_proc_info **table) ;
 void		insert_to_table(t_proc_info **table,t_proc_info *process) ;
-int			hash_function(int pid); // the function returns the index by PID
+int			hash_function(pid_t pid); // the function returns the index by PID
 bool		is_strnumeric(char *str) ;
 void		print_hash_table(t_proc_info **table) ;
 t_proc_info	**process_table();
 void		free_hash_table(t_proc_info **table) ;
-float		get_cpu_usage(char *buff) ;
+float		get_cpu_usage(char *buff, char *name) ;
 void		push_child(t_proc_info *parent,t_proc_info *child) ;
 void		print_tree(t_proc_info **hash_table, int depth, int size) ;
 void		make_tree(t_proc_info **hash_table) ;

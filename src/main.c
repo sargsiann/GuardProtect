@@ -10,6 +10,8 @@ void	executor(char *pid, char *tree_flag)
 		return ;
 	}
 	t_proc_info **table = process_table();
+	for (long i = 0; i < 10000000000; i++)
+		;
 	if (tree_flag != NULL) {
  		make_tree(table);
 		print_tree(table,0,TABLE_SIZE);
