@@ -27,6 +27,7 @@ typedef struct s_proc_info {
 	pid_t		ppid; // process of parent id
 	proc_state	state; //state of the process
 	float		cpu_usage; //cpu usage in percent of process
+	float		mem_usage; //mem usage in percent of process
 	int			children_size; // childs vector_size
 	struct		s_proc_info **children; //pointer to an child process of each process FOR TREE
 	struct		s_proc_info *next; //next to an next member in hash table in case of chaining FOR LINKED LIST
@@ -52,4 +53,5 @@ float		get_cpu_usage(char *buff) ;
 void		push_child(t_proc_info *parent,t_proc_info *child) ;
 void		print_tree(t_proc_info **hash_table, int depth, int size) ;
 void		make_tree(t_proc_info **hash_table) ;
+float		get_mem_usage(int pid) ;
 #endif

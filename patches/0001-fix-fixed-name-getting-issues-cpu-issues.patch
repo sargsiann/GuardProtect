@@ -1,0 +1,102 @@
+From 71e0dd35eabd1a3a1ee6b0a4275e6a14f2c8b77f Mon Sep 17 00:00:00 2001
+From: sargsiann <sargsyand648@gmail.com>
+Date: Fri, 12 Sep 2025 15:46:36 +0400
+Subject: [PATCH] fix:fixed name getting issues,cpu %issues
+
+---
+ inc/gp.h              | 4 ++--
+ src/main.c            | 2 ++
+ src/pars/cpu_use.c    | 7 ++++---
+ src/pars/parse_proc.c | 6 +++---
+ 4 files changed, 11 insertions(+), 8 deletions(-)
+
+diff --git a/inc/gp.h b/inc/gp.h
+index 290bd8e..d4e5e24 100644
+--- a/inc/gp.h
++++ b/inc/gp.h
+@@ -43,12 +43,12 @@ void		free_proc_info(t_proc_info *info) ;
+ void		delete_from_table(t_proc_info **table,int pid) ;
+ t_proc_info	*get_from_table(int pid, t_proc_info **table) ;
+ void		insert_to_table(t_proc_info **table,t_proc_info *process) ;
+-int			hash_function(int pid); // the function returns the index by PID
++int			hash_function(pid_t pid); // the function returns the index by PID
+ bool		is_strnumeric(char *str) ;
+ void		print_hash_table(t_proc_info **table) ;
+ t_proc_info	**process_table();
+ void		free_hash_table(t_proc_info **table) ;
+-float		get_cpu_usage(char *buff) ;
++float		get_cpu_usage(char *buff, char *name) ;
+ void		push_child(t_proc_info *parent,t_proc_info *child) ;
+ void		print_tree(t_proc_info **hash_table, int depth, int size) ;
+ void		make_tree(t_proc_info **hash_table) ;
+diff --git a/src/main.c b/src/main.c
+index d823e60..17b3b5d 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -10,6 +10,8 @@ void	executor(char *pid, char *tree_flag)
+ 		return ;
+ 	}
+ 	t_proc_info **table = process_table();
++	for (long i = 0; i < 10000000000; i++)
++		;
+ 	if (tree_flag != NULL) {
+  		make_tree(table);
+ 		print_tree(table,0,TABLE_SIZE);
+diff --git a/src/pars/cpu_use.c b/src/pars/cpu_use.c
+index d32db58..364b0b2 100644
+--- a/src/pars/cpu_use.c
++++ b/src/pars/cpu_use.c
+@@ -55,7 +55,7 @@ float	get_time_from_boot()
+ 	return atof(buff); // returning the time from boot in seconds
+ }
+ 
+-float	get_cpu_usage(char *buff) 
++float	get_cpu_usage(char *buff, char *name) 
+ {	
+ 	int ticks_per_sec = sysconf(_SC_CLK_TCK); // getting the number of jiffies per sec from system configuration
+ 
+@@ -66,10 +66,11 @@ float	get_cpu_usage(char *buff)
+ 	int start_time = 0;
+ 
+ 	get_cpu_section(&user_time,&kernel_time,&cus_time,&cuk_time,buff, &start_time);
+-	int	total_time = get_time_from_boot() * ticks_per_sec - start_time; // total time in jiffies that process is active
++	
++	float	total_time = get_time_from_boot() - start_time/ticks_per_sec; // total time in jiffies that process is active
+ 	if (total_time == 0)
+ 		return 0;
+-	float	cpu_usage = 100.0 * (user_time + kernel_time + cus_time + cuk_time) / total_time;
++	float	cpu_usage = 100.00 * ((user_time/ticks_per_sec + kernel_time/ticks_per_sec + cus_time/ticks_per_sec + cuk_time/ticks_per_sec) / total_time);
+ 
+ 	// get_cpu_section(&user_time,&kernel_time,&cus_time,&cuk_time,buff);
+ 	return cpu_usage;
+diff --git a/src/pars/parse_proc.c b/src/pars/parse_proc.c
+index 8a5fe24..0efa769 100644
+--- a/src/pars/parse_proc.c
++++ b/src/pars/parse_proc.c
+@@ -37,20 +37,20 @@ bool	get_proc_info(char *path, t_proc_info *proc_info)
+ 	
+ 	//2. moving through the second indicator
+ 	char	*start = strchr(buff,' ') + 2; // skipping first '('
+-	char	*name_end = strchr(start,')'); // the second space skipping the last ')'
++	char	*name_end = strrchr(start,')'); // the second space skipping the last ')'
+ 	*name_end = 0; // temporary put 0 on it
+ 	proc_info->name = strdup(start); // duping that section of memory
+ 	*name_end = ')'; // restoreing the value
+ 
+ 	//3. moving through the third indicator
+-	proc_info->state = get_state(*(name_end + 1)); // state is after the space
++	proc_info->state = get_state(*(name_end + 2)); // state is after the space
+ 	name_end += 4;
+ 
+ 	//4. moving through the fourth indicator
+ 	proc_info->ppid = atoi(name_end);
+ 	proc_info->next = NULL;
+ 
+-	proc_info->cpu_usage = get_cpu_usage(buff); // getting the cpu usage of process
++	proc_info->cpu_usage = get_cpu_usage(buff,proc_info->name); // getting the cpu usage of process
+ 	proc_info->children = NULL; // by default 0
+ 	proc_info->children_size = 0; // by default 0
+ 	close(fd);
+-- 
+2.43.0
+

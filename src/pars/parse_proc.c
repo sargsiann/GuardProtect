@@ -43,7 +43,7 @@ bool	get_proc_info(char *path, t_proc_info *proc_info)
 	*name_end = ')'; // restoreing the value
 
 	//3. moving through the third indicator
-	proc_info->state = get_state(*(name_end + 1)); // state is after the space
+	proc_info->state = get_state(*(name_end + 2)); // state is after the space
 	name_end += 4;
 
 	//4. moving through the fourth indicator
@@ -51,6 +51,7 @@ bool	get_proc_info(char *path, t_proc_info *proc_info)
 	proc_info->next = NULL;
 
 	proc_info->cpu_usage = get_cpu_usage(buff); // getting the cpu usage of process
+	proc_info->mem_usage = get_mem_usage(proc_info->pid);
 	proc_info->children = NULL; // by default 0
 	proc_info->children_size = 0; // by default 0
 	close(fd);
