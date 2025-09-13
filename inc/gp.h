@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <dirent.h>
+#include <sys/sysinfo.h>
 
 typedef	enum {
 	RUNNING, // process is on runing state on cpu or waiting to run on cpu
@@ -28,6 +29,7 @@ typedef struct s_proc_info {
 	proc_state	state; //state of the process
 	float		cpu_usage; //cpu usage in percent of process
 	float		mem_usage; //mem usage in percent of process
+	float		ch_cpu_usage; // usage in percent of child proceses of process
 	int			children_size; // childs vector_size
 	struct		s_proc_info **children; //pointer to an child process of each process FOR TREE
 	struct		s_proc_info *next; //next to an next member in hash table in case of chaining FOR LINKED LIST
@@ -49,7 +51,7 @@ bool		is_strnumeric(char *str) ;
 void		print_hash_table(t_proc_info **table) ;
 t_proc_info	**process_table();
 void		free_hash_table(t_proc_info **table) ;
-float		get_cpu_usage(char *buff, char *name) ;
+void		get_cpu_usage(char *buff, char *name, t_proc_info *proc) ;
 void		push_child(t_proc_info *parent,t_proc_info *child) ;
 void		print_tree(t_proc_info **hash_table, int depth, int size) ;
 void		make_tree(t_proc_info **hash_table) ;

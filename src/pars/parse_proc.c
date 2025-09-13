@@ -24,8 +24,8 @@ bool	get_proc_info(char *path, t_proc_info *proc_info)
 		return false;
 	}
 
-	char	buff[1024] = {0};
-	int	bytes_readen = read(fd,buff,1024);
+	char	buff[2048] = {0};
+	int	bytes_readen = read(fd,buff,2048);
 
 	if (bytes_readen == -1) {
 		exit_error("Read error",0);
@@ -50,7 +50,7 @@ bool	get_proc_info(char *path, t_proc_info *proc_info)
 	proc_info->ppid = atoi(name_end);
 	proc_info->next = NULL;
 
-	proc_info->cpu_usage = get_cpu_usage(buff,NULL); // getting the cpu usage of process
+	get_cpu_usage(buff,NULL,proc_info);
 	proc_info->mem_usage = get_mem_usage(proc_info->pid);
 	proc_info->children = NULL; // by default 0
 	proc_info->children_size = 0; // by default 0

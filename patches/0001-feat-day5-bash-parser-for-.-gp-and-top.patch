@@ -1,0 +1,100 @@
+From a705461e84be7c88ecae5c614e9aeaccd91a4d28 Mon Sep 17 00:00:00 2001
+From: sargsiann <sargsyand648@gmail.com>
+Date: Fri, 12 Sep 2025 19:37:28 +0400
+Subject: [PATCH] feat:day5 bash parser for ./gp and top
+
+---
+ scripts/proc_tree      |  0
+ scripts/res_usage      | 61 ++++++++++++++++++++++++++++++++++++++++++
+ src/print/print_proc.c |  4 +--
+ 3 files changed, 63 insertions(+), 2 deletions(-)
+ mode change 100644 => 100755 scripts/proc_tree
+ create mode 100755 scripts/res_usage
+
+diff --git a/scripts/proc_tree b/scripts/proc_tree
+old mode 100644
+new mode 100755
+diff --git a/scripts/res_usage b/scripts/res_usage
+new file mode 100755
+index 0000000..0ae6c3e
+--- /dev/null
++++ b/scripts/res_usage
+@@ -0,0 +1,61 @@
++#!/bin/bash
++
++cmp_flag=$1 #flag for compareing result of ./gp all result with our scripts
++
++if [ ! -z $1 ]; then 
++	if [ ! -e "../gp" ] ; then
++		echo "please do an make to have gp"
++		exit 1
++	fi
++	if [ $1 != '-d' ] ; then
++		echo "wrong argument type ./res_usage -d"
++		exit 1
++	fi
++fi
++
++
++top_cmd="$(top -b -n 1 | tail -n +8 | awk '{printf("%-10s %-10s %-10s \n",$1,$9,$10)}' | sort -n)"
++
++
++gp_cmd="$(../gp all | tail -n +2 | gawk '{
++    num = ""
++    num2 = ""
++    num3 = ""
++
++    # find first pure number
++    for (i = 1; i <= NF; i++) {
++        if ($i ~ /^[0-9]+$/) {
++            num = $i
++            pos = i      # remember where we found it
++            break
++        }
++    }
++
++    # find first % at least 5 fields after num
++    for (j = pos + 1; j <= NF; j++) {
++        if ($j ~ /^[0-9.]+%$/) {
++            num2 = $j
++            pos2 = j
++            break
++        }
++    }
++
++    # # find next % after num2
++    for (k = pos2 + 1; k <= NF; k++) {
++        if ($k ~ /^[0-9.]+%$/) {
++            num3 = $k
++            break
++        }
++    }
++
++    printf("%-10s %-10s %-10s\n", num, num2, num3)
++}' | sort -n)"
++
++
++
++if [ ! -z $1 ]; then 
++	echo "$gp_cmd" > gp_res
++	echo "$top_cmd" > top_res
++else
++	echo "$top_cmd"
++fi
+diff --git a/src/print/print_proc.c b/src/print/print_proc.c
+index 1014581..fe8a5dc 100644
+--- a/src/print/print_proc.c
++++ b/src/print/print_proc.c
+@@ -26,6 +26,6 @@ void	print_proc_info(t_proc_info *info)
+ 			printf("%20s","UNKNOWN ");
+ 			break;
+ 	}
+-	printf("%10.2f %%",info->cpu_usage);
+-	printf("%10.2f %%\n",info->mem_usage);
++	printf("%10.2f%%",info->cpu_usage);
++	printf("%10.2f%%\n",info->mem_usage);
+ }
+\ No newline at end of file
+-- 
+2.43.0
+
